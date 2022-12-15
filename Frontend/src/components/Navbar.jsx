@@ -4,8 +4,9 @@ import { Box } from '@mui/system'
 import axios from 'axios';
 import moment from 'moment'
 import {
-  AppBar, Autocomplete, Avatar, AvatarGroup, Badge, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, Collapse, Divider, FormControl, Icon, IconButton, ImageList, ImageListItem, Input,
-  InputBase, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Select, Stack, styled, Switch, TextField, Toolbar, Typography
+  Alert,
+  AppBar, Autocomplete, Avatar, AvatarGroup, Badge, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, CircularProgress, Collapse, Divider, FormControl, Icon, IconButton, ImageList, ImageListItem, Input,
+  InputBase, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Modal, Select, Snackbar, Stack, styled, Switch, TextField, Toolbar, Typography
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import SwitchBase from '@mui/material/internal/SwitchBase'
@@ -50,12 +51,17 @@ const UserBox1 = styled(Box)({
   marginBottom: "20px"
 })
 
+const StyledModal = styled(Modal)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center"
+})
+
+
+
+
 const Navbar = () => {
-  // const [post, setPost] = useState({
-  //   name: "",
-  //   price: "",
-  //   description: "",
-  // })
+
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -71,8 +77,10 @@ const Navbar = () => {
   const [ray2, setRay2] = useState();
   const [byName, setByName] = useState("");
   const [loader, setLoader] = useState(false)
-
-  let Objs = {
+  const [opens, setOpens] = useState(false);
+  const [mtype, setMtype] = useState("")
+  const [messages, setMessages] = useState("")
+   let Objs = {
     name: name,
     price: price,
     description: description,
@@ -88,12 +96,21 @@ const Navbar = () => {
     baseUrl = "http://localhost:5001"
   }
   const deletePost = () => {
+    setLoader(true)
     axios.delete(`${baseUrl}/product/${del}`)
       .then(response => {
         console.log(response.data);
-        getAllPost()
+        setLoader(false);
+        getAllPost();
+        setOpens(true)
+        setMtype("success")
+        setMessages("Product Deleted Successfully")
       })
       .catch(err => {
+        setLoader(false)
+        setOpens(true)
+        setMtype("error")
+        setMessages("Product Not Deleted Successfully")
         console.log("err", err);
       })
   }
@@ -123,8 +140,10 @@ const Navbar = () => {
   };
 
   const getAllPost = () => {
+    setLoader(true);
     axios.get(`${baseUrl}/products`)
       .then(response => {
+        setLoader(false);
         console.log("allDAta", response.data.data);
         setRay1(response.data.data.reverse())
         // let a = ray1?.map((option) => option.name)
@@ -133,6 +152,10 @@ const Navbar = () => {
       })
       .catch(err => {
         console.log("err", err);
+        setLoader(false)
+        setOpens(true)
+        setMtype("error")
+        setMessages("Server Error Please try Later")
       })
   };
 
@@ -143,32 +166,44 @@ const Navbar = () => {
 
   const updation = (e) => {
     e.preventDefault();
+    setLoader(true)
     setchapli(false)
     axios.put(`${baseUrl}/product/${isEditing}`, Objt)
       .then(response => {
         console.log("allDAta", response.data.data);
         getAllPost();
-        // setRay1(response.data.data)
-        // setIsEditingText("")
-        // setIsEditingPrice("")
-        // setIsEditingDescription("")
+        setOpens(true);
+        setLoader(false)
+        setMtype("success")
+        setMessages("Product Updated Successfully")
       })
       .catch(err => {
         console.log("err", err);
+        setOpens(true)
+        setLoader(false)
+        setMtype("error")
+        setMessages("Product Not Updated Successfully")
       })
-
   }
   const edit = () => {
     setchapli(true)
   }
-  // console.log("post", Objs);
-  // let A = []
-  // A.push(ray1)
-  // setRay2(A)
-  // console.log("Arr", A)
-  //   const checkLog = () => {
-  // console.log("ray1", ray1);
-  //   }
+
+
+
+
+  // const handleClick = () => {
+  //   setOpens(true);
+  // };
+
+  const handleClose = (event, reason) => {
+    // e.preventDefault();
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpens(false);
+  };
 
   return (
     <div>
@@ -649,8 +684,34 @@ const Navbar = () => {
 
           </Box>
         </Box>
-
       </Stack>
+      <StyledModal
+        open={loader}
+        // onClose={(e) => setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box>
+          <CircularProgress />
+        </Box>
+      </StyledModal>
+
+      <Stack spacing={2} sx={{ width: '100%' }}>
+        {/* <Button variant="outlined" onClick={handleClick}>
+        Open success snackbar
+      </Button> */}
+        <Snackbar open={opens} autoHideDuration={2000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={mtype} sx={{ width: '100%' }}>
+            {messages}
+          </Alert>
+        </Snackbar>
+        {/* <Alert severity="error">This is an error message!</Alert>
+      <Alert severity="warning">This is a warning message!</Alert>
+      <Alert severity="info">This is an information message!</Alert> */}
+        {/* <Alert severity="success">This is a success message!</Alert> */}
+      </Stack>
+
+
     </div >
   )
 }
