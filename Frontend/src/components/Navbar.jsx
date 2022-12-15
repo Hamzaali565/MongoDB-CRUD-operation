@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import axios from 'axios';
 import moment from 'moment'
 import {
-  AppBar, Avatar, AvatarGroup, Badge, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, Collapse, Divider, FormControl, Icon, IconButton, ImageList, ImageListItem, Input,
+  AppBar, Autocomplete, Avatar, AvatarGroup, Badge, Button, ButtonGroup, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, Collapse, Divider, FormControl, Icon, IconButton, ImageList, ImageListItem, Input,
   InputBase, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Select, Stack, styled, Switch, TextField, Toolbar, Typography
 } from '@mui/material'
 import { red } from '@mui/material/colors'
@@ -18,7 +18,7 @@ const StyledToolbar = styled(Toolbar)({
   justifyContent: "space-between"
 })
 const Search = styled("div")(({ theme }) => ({
-  backgroundColor: "white",
+  // backgroundColor: "white",
   padding: "0 10px",
   borderRadius: theme.shape.borderRadius,
   width: "40%"
@@ -68,7 +68,9 @@ const Navbar = () => {
   const [isEditingText, setIsEditingText] = useState("")
   const [isEditingPrice, setIsEditingPrice] = useState("")
   const [isEditingDescription, setIsEditingDescription] = useState("")
-  const [ray2, setRay2] = useState([]);
+  const [ray2, setRay2] = useState();
+  const [byName, setByName] = useState("");
+  const [loader, setLoader] = useState(false)
 
   let Objs = {
     name: name,
@@ -107,11 +109,27 @@ const Navbar = () => {
         console.log("err", err);
       })
   }
+
+  const Product = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${baseUrl}/product/${byName}`);
+      setRay1(response.data.data)
+      console.log(response.data.data);
+      // setistrue(!istrue);
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
   const getAllPost = () => {
     axios.get(`${baseUrl}/products`)
       .then(response => {
         console.log("allDAta", response.data.data);
         setRay1(response.data.data.reverse())
+        // let a = ray1?.map((option) => option.name)
+        //  console.log("a", a);
+        // setRay2(a)
       })
       .catch(err => {
         console.log("err", err);
@@ -161,7 +179,32 @@ const Navbar = () => {
             display: { xs: "none", sm: "block" }
           }}> CRUD</Typography>
           <Home sx={{ display: { xs: "block", sm: "none" } }} />
-          <Search><InputBase placeholder='Search' sx={{ width: "100%" }} /></Search>
+          {/* <Search><InputBase placeholder='Search' sx={{ width: "100%" }} /></Search> */}
+          <Search>
+            <form onSubmit={Product}>
+              <Autocomplete
+                sx={{
+                  width: "100%",
+                  bgcolor: "white",
+                  borderRadius: "8px"
+                }}
+                id="free-solo-demo"
+                freeSolo
+                options=
+                {ray1?.map((option) => option.name)}
+                // onChange={(e) => {
+                //   setByName(e.target.value)
+                // }}
+                // onChange={(e) => console.log(e.target.value)}
+                onChange={(event, value) => {
+                  setByName(value)
+
+                }}
+                placeholder="Search With UserName"
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </form>
+          </Search>
 
           <Iconi>
 
@@ -258,11 +301,8 @@ const Navbar = () => {
                 </ListItemButton>
               </ListItem>
             </List>
-
           </Box>
         </Box>
-
-
         {/* Feed */}
 
         <Box bgcolor={'whitesmoke'} flex={4} p={2}>
@@ -289,10 +329,12 @@ const Navbar = () => {
                     id="standard-multiline-static"
                     onChange={(e) => { setName(e.target.value) }}
                     multiline
+                    // options=
+                    // {ray1?.map((option) => option.name)}
                     rows={1}
                     placeholder="Name For Product "
                     variant="standard" />
-                  <TextField
+                  {/* <TextField
                     sx={{ width: "100%" }}
                     onChange={(e) => { setPrice(e.target.value) }}
                     id="standard-multiline-static"
@@ -300,7 +342,14 @@ const Navbar = () => {
                     type='number'
                     rows={1}
                     placeholder="Price For Product"
-                    variant="standard" />
+                    variant="standard" /> */}
+                  <Input
+                    sx={{ width: "100%" }}
+                    onChange={(e) => { setPrice(e.target.value) }}
+                    type='number'
+                    placeholder="Price For Product"
+                    variant="standard"
+                  />
                   <TextField
                     sx={{ width: "100%" }}
                     onChange={(e) => { setDescription(e.target.value) }}

@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 // mongoose.set('strictQuery', true);
 const app = express()
 const port = process.env.PORT || 5001;
-const mongodbURI = process.env.mongodbURI || "mongodb+srv://CRUD:hamzaali565@cluster0.kh990zg.mongodb.net/posting?retryWrites=true&w=majority";
+const mongodbURI = process.env.mongodbURI ||
+    "mongodb+srv://CRUD:hamzaali565@cluster0.kh990zg.mongodb.net/posting?retryWrites=true&w=majority";
 
 app.use(cors());
 app.use(express.json());
@@ -48,11 +49,12 @@ app.post('/product', (req, res) => {
     //     // id: "1670310402018",
     // });
 
-    productModel.create({
-        name: body.name,
-        price: body.price,
-        description: body.description,
-    },
+    productModel.create(
+        {
+            name: body.name,
+            price: body.price,
+            description: body.description,
+        },
         (err, saved) => {
             if (!err) {
                 console.log(saved);
@@ -88,32 +90,57 @@ app.get('/products', (req, res) => {
 
 })
 
-app.get('/product/:id', (req, res) => {
+// app.get('/product/:id', (req, res) => {
 
-    const id = req.params.id;
+//     const id = req.params.id;
 
-    productModel.findOne({ _id: id }, (err, data) => {
-        if (!err) {
+//     productModel.findOne({ _id: id }, (err, data) => {
+//         if (!err) {
 
-            if (data) {
-                res.send({
-                    message: `get product by id: ${data._id} success`,
-                    data: data
-                });
+//             if (data) {
+//                 res.send({
+//                     message: `get product by id: ${data._id} success`,
+//                     data: data
+//                 });
+//             } else {
+//                 res.status(404).send({
+//                     message: "product not found",
+//                 })
+//             }
+
+//         } else {
+//             res.status(500).send({
+//                 message: "server error"
+//             })
+//         }
+//     });
+
+// })
+//
+app.get('/product/:name', (req, res) => {
+    // console.log(req.params.name);
+    const queryName = req.params.name;
+
+    productModel.find({ name:{$regex:`${queryName}`}}
+        , (err, data) => {
+            if (!err) {
+                if (data) {
+                    res.send({
+                        message: 'get product success',
+                        data: data,
+                    });
+                } else {
+                    res.status(404).send({
+                        message: "product not found",
+                    });
+                }
             } else {
-                res.status(404).send({
-                    message: "product not found",
-                })
+                res.status(500).send({
+                    message: "server error",
+                });
             }
-
-        } else {
-            res.status(500).send({
-                message: "server error"
-            })
-        }
-    });
-
-})
+        });
+});
 
 app.delete('/product/:id', (req, res) => {
     const id = req.params.id;
