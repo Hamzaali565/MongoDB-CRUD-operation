@@ -120,10 +120,16 @@ const Navbar = () => {
       .then(response => {
         console.log(response.data.data);
         getAllPost()
+        setOpens(true)
+        setMtype("success")
+        setMessages("Post Uploaded Successfully")
         // setRay1(response.data.data)
       })
       .catch(err => {
         console.log("err", err);
+        setOpens(true)
+        setMtype("error")
+        setMessages("Product Not Uploaded Successfully")
       })
   }
 
