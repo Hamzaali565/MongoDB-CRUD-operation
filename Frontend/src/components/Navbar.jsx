@@ -74,7 +74,7 @@ const Navbar = () => {
   const [isEditingText, setIsEditingText] = useState("")
   const [isEditingPrice, setIsEditingPrice] = useState("")
   const [isEditingDescription, setIsEditingDescription] = useState("")
-  const [ray2, setRay2] = useState();
+  const [pLoad, setPLoad] = useState(false);
   const [byName, setByName] = useState("");
   const [loader, setLoader] = useState(false)
   const [opens, setOpens] = useState(false);
@@ -100,8 +100,8 @@ const Navbar = () => {
     axios.delete(`${baseUrl}/product/${del}`)
       .then(response => {
         console.log(response.data);
-        setLoader(false);
-        getAllPost();
+        // setLoader(false);
+        setPLoad(!pLoad)
         setOpens(true)
         setMtype("success")
         setMessages("Product Deleted Successfully")
@@ -119,7 +119,7 @@ const Navbar = () => {
     axios.post(`${baseUrl}/product`, Objs)
       .then(response => {
         console.log(response.data.data);
-        getAllPost()
+        setPLoad(!pLoad)
         setOpens(true)
         setMtype("success")
         setMessages("Post Uploaded Successfully")
@@ -152,9 +152,7 @@ const Navbar = () => {
         setLoader(false);
         console.log("allDAta", response.data.data);
         setRay1(response.data.data.reverse())
-        // let a = ray1?.map((option) => option.name)
-        //  console.log("a", a);
-        // setRay2(a)
+       
       })
       .catch(err => {
         console.log("err", err);
@@ -167,8 +165,7 @@ const Navbar = () => {
 
   useEffect(() => {
     getAllPost();
-
-  }, [])
+  }, [pLoad])
 
   const updation = (e) => {
     e.preventDefault();
@@ -177,9 +174,9 @@ const Navbar = () => {
     axios.put(`${baseUrl}/product/${isEditing}`, Objt)
       .then(response => {
         console.log("allDAta", response.data.data);
-        getAllPost();
+        setPLoad(!pLoad);
         setOpens(true);
-        setLoader(false)
+        // setLoader(false)
         setMtype("success")
         setMessages("Product Updated Successfully")
       })
