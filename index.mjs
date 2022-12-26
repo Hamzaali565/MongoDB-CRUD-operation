@@ -419,11 +419,12 @@ app.put('/api/v1/product/:id', async (req, res) => {
 
         res.send({
             message: "product modified successfully",
-            data: products
+            data: data
         });
 
     } 
     catch (error) {
+        console.log("error: ", error)
         res.status(500).send({
             message: "server error"
         })
