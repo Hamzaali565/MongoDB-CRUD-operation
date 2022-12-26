@@ -217,8 +217,8 @@ app.use((req, res, next) => {
                 res.cookie('Token', '', {
                     maxAge: 1,
                     httpOnly: true,
-                    sameSite:null,
-                    secure:true
+                    sameSite: true
+                    // secure:true
                 });
                 res.send({ message: "token expired" })
 
