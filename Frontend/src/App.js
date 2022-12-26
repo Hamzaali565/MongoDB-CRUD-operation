@@ -20,7 +20,7 @@ function App() {
     const getProduct = async () =>{
       let baseUrl = "http://localhost:5001"
       try{
-      let response =await axios.get(`${baseUrl}/products`, {
+      let response =await axios.get(`${baseUrl}/api/v1/products`, {
         withCredentials: true
       })
       dispatch ({

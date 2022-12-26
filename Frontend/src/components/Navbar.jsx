@@ -98,7 +98,7 @@ const Navbar = () => {
   const deletePost = () => {
     setLoader(true)
     
-    axios.delete(`${baseUrl}/product/${del}`,{withCredentials: true})
+    axios.delete(`${baseUrl}/api/v1/product/${del}`,{withCredentials: true})
       .then(response => {
         console.log(response.data);
         // setLoader(false);
@@ -117,7 +117,7 @@ const Navbar = () => {
   }
   const handlerChange = (e) => {
     e.preventDefault();
-    axios.post(`${baseUrl}/product`, Objs, {withCredentials:true})
+    axios.post(`${baseUrl}/api/v1/product`, Objs, {withCredentials:true})
       .then(response => {
         console.log(response.data.data);
         setPLoad(!pLoad)
@@ -137,7 +137,7 @@ const Navbar = () => {
   const Product = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${baseUrl}/product/${byName}`,{withCredentials:true});
+      const response = await axios.get(`${baseUrl}/api/v1/product/${byName}`,{withCredentials:true});
       setRay1(response.data.data)
       console.log(response.data.data);
       // setistrue(!istrue);
@@ -148,7 +148,7 @@ const Navbar = () => {
 
   const getAllPost = () => {
     setLoader(true);
-    axios.get(`${baseUrl}/products`,{withCredentials:true})
+    axios.get(`${baseUrl}/api/v1/products`,{withCredentials:true})
       .then(response => {
         setLoader(false);
         console.log("allDAta", response.data.data);
@@ -172,7 +172,7 @@ const Navbar = () => {
     e.preventDefault();
     setLoader(true)
     setchapli(false)
-    axios.put(`${baseUrl}/product/${isEditing}`, Objt, {withCredentials:true})
+    axios.put(`${baseUrl}/api/v1/product/${isEditing}`, Objt, {withCredentials : true})
       .then(response => {
         console.log("allDAta", response.data.data);
         setPLoad(!pLoad);
@@ -185,6 +185,7 @@ const Navbar = () => {
         console.log("err", err);
         setOpens(true)
         setLoader(false)
+        // setPLoad(!pLoad)
         setMtype("error")
         setMessages("Product Not Updated Successfully")
       })
