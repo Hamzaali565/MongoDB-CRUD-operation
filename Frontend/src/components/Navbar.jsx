@@ -97,7 +97,8 @@ const Navbar = () => {
   }
   const deletePost = () => {
     setLoader(true)
-    axios.delete(`${baseUrl}/product/${del}`)
+    
+    axios.delete(`${baseUrl}/product/${del}`,{withCredentials: true})
       .then(response => {
         console.log(response.data);
         // setLoader(false);
@@ -116,7 +117,7 @@ const Navbar = () => {
   }
   const handlerChange = (e) => {
     e.preventDefault();
-    axios.post(`${baseUrl}/product`, Objs)
+    axios.post(`${baseUrl}/product`, Objs, {withCredentials:true})
       .then(response => {
         console.log(response.data.data);
         setPLoad(!pLoad)
@@ -136,7 +137,7 @@ const Navbar = () => {
   const Product = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${baseUrl}/product/${byName}`);
+      const response = await axios.get(`${baseUrl}/product/${byName}`,{withCredentials:true});
       setRay1(response.data.data)
       console.log(response.data.data);
       // setistrue(!istrue);
@@ -147,7 +148,7 @@ const Navbar = () => {
 
   const getAllPost = () => {
     setLoader(true);
-    axios.get(`${baseUrl}/products`)
+    axios.get(`${baseUrl}/products`,{withCredentials:true})
       .then(response => {
         setLoader(false);
         console.log("allDAta", response.data.data);
@@ -171,7 +172,7 @@ const Navbar = () => {
     e.preventDefault();
     setLoader(true)
     setchapli(false)
-    axios.put(`${baseUrl}/product/${isEditing}`, Objt)
+    axios.put(`${baseUrl}/product/${isEditing}`, Objt, {withCredentials:true})
       .then(response => {
         console.log("allDAta", response.data.data);
         setPLoad(!pLoad);

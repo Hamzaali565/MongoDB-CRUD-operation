@@ -23,13 +23,16 @@ function Signup() {
                 lastName: name,
                 email: email,
                 password: password
+            },{
+                withCredentials: true
             })
 
 
             console.log("signup successful");
             setResult("signup successful")
 
-        } catch (e) {
+        }
+         catch (e) {
             console.log("e: ", e);
         }
 
