@@ -50,7 +50,6 @@ const UserBox1 = styled(Box)({
   gap: "10px",
   marginBottom: "20px"
 })
-
 const StyledModal = styled(Modal)({
   display: "flex",
   justifyContent: "center",

@@ -3,7 +3,10 @@ import { GlobalContext } from '../context/Context';
 import { Button, TextField } from '@mui/material';
 import axios from "axios";
 
-const baseUrl = 'http://localhost:5001'
+let baseUrl = "";
+if (window.location.href.split(":")[0] === "http") {
+    baseUrl = "http://localhost:5001"
+}
 
 
 function Login() {

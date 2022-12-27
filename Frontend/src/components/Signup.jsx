@@ -2,8 +2,10 @@ import { useState } from "react";
 import axios from 'axios';
 
 
-const baseUrl = 'http://localhost:5001'
-
+let baseUrl = "";
+if (window.location.href.split(":")[0] === "http") {
+    baseUrl = "http://localhost:5001"
+}
 
 function Signup() {
 
@@ -13,7 +15,7 @@ function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    
+
     const signupHandler = async (e) => {
         e.preventDefault();
 
@@ -23,7 +25,7 @@ function Signup() {
                 lastName: name,
                 email: email,
                 password: password
-            },{
+            }, {
                 withCredentials: true
             })
 
@@ -32,7 +34,7 @@ function Signup() {
             setResult("signup successful")
 
         }
-         catch (e) {
+        catch (e) {
             console.log("e: ", e);
         }
 

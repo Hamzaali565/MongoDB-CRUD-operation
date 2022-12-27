@@ -10,33 +10,36 @@ import { Box, createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import axios from 'axios';
 import { Routes, Route, Link, Navigate } from "react-router-dom";
-
+let baseUrl = ""
+if (window.location.href.split(":")[0] === "http") {
+  baseUrl = "http://localhost:5001"
+}
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
 
   const [fullName, setFullName] = useState("");
 
   useEffect(() => {
-    const getProduct = async () =>{
-      let baseUrl = "http://localhost:5001"
-      try{
-      let response =await axios.get(`${baseUrl}/api/v1/products`, {
-        withCredentials: true
-      })
-      dispatch ({
-        type:'USER_LOGIN'
-      })
-    }
-    catch{
-      dispatch ({
-        type:'USER_LOGOUT'
-      })
+    const getProduct = async () => {
+      let baseUrl = "";
+      try {
+        let response = await axios.get(`${baseUrl}/api/v1/products`, {
+          withCredentials: true
+        })
+        dispatch({
+          type: 'USER_LOGIN'
+        })
+      }
+      catch {
+        dispatch({
+          type: 'USER_LOGOUT'
+        })
 
-    }
+      }
     }
     getProduct();
   }, [])
-  
+
   return (
 
     <Stack>
@@ -59,7 +62,7 @@ function App() {
         </Routes>
         :
         <Routes>
-          <Route path="/" element={<Login/>} />
+          <Route path="/" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Routes>
