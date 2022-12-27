@@ -1,7 +1,6 @@
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import { GlobalContext } from '../context/Context';
 import { Button, TextField } from '@mui/material';
-
 import axios from "axios";
 
 const baseUrl = 'http://localhost:5001'
@@ -10,7 +9,7 @@ const baseUrl = 'http://localhost:5001'
 function Login() {
 
     const [result, setResult] = useState("");
-
+    let { state, dispatch } = useContext(GlobalContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -24,7 +23,10 @@ function Login() {
             }, {
                 withCredentials: true
             })
-
+            dispatch({
+                type: 'USER_LOGIN',
+                payload: null
+            })
 
             console.log("login successful");
             setResult("login successful")

@@ -18,10 +18,10 @@ const mongodbURI = process.env.mongodbURI ||
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use(cors({
-//     origin: ['http://localhost:3000', "*"],
-//     credentials: true
-// }));
+app.use(cors({
+    origin: ['http://localhost:3000', "*"],
+    credentials: true
+}));
 
 
 let productSchema = new mongoose.Schema({
@@ -195,7 +195,7 @@ app.post("/logout", (req, res) => {
 
 app.use((req, res, next) => {
 
-    console.log("req.cookies: ", req.cookies);
+    console.log("req.cookies:", req.cookies);
 
     if (!req?.cookies?.Token) {
         res.status(401).send({

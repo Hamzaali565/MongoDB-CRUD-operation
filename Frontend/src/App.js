@@ -4,20 +4,44 @@ import Navbar from './components/Navbar';
 import Signup from './components/Signup'
 import Login from './components/Login'
 import { Stack } from '@mui/system';
-import { useState } from 'react';
+import { GlobalContext } from './context/Context';
+import { useState, useContext, useEffect } from 'react';
 import { Box, createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
+import axios from 'axios';
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
+  let { state, dispatch } = useContext(GlobalContext);
+
   const [fullName, setFullName] = useState("");
 
+  useEffect(() => {
+    const getProduct = async () =>{
+      let baseUrl = "http://localhost:5001"
+      try{
+      let response =await axios.get(`${baseUrl}/products`, {
+        withCredentials: true
+      })
+      dispatch ({
+        type:'USER_LOGIN'
+      })
+    }
+    catch{
+      dispatch ({
+        type:'USER_LOGOUT'
+      })
+
+    }
+    }
+    getProduct();
+  }, [])
+  
   return (
 
     <Stack>
       {
-        (isLogin) ?
+        (state.isLogin) ?
           null
           :
           <ul className='navBar'>
@@ -27,7 +51,7 @@ function App() {
       }
 
 
-      {(isLogin) ?
+      {(state.isLogin) ?
 
         <Routes>
           <Route path="/" element={<Navbar />} />
@@ -35,10 +59,16 @@ function App() {
         </Routes>
         :
         <Routes>
-          <Route path="/" element={<Login set={setIsLogin} />} />
+          <Route path="/" element={<Login/>} />
           <Route path="signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Routes>
+      }
+
+      {
+        (state.isLogin === null) ?
+          <div>Splash</div> :
+          null
       }
     </Stack>
 
