@@ -21,7 +21,6 @@ function App() {
 
   useEffect(() => {
     const getProduct = async () => {
-      let baseUrl = "";
       try {
         let response = await axios.get(`${baseUrl}/api/v1/products`, {
           withCredentials: true
@@ -43,16 +42,6 @@ function App() {
   return (
 
     <Stack>
-      {
-        (state.isLogin) ?
-          null
-          :
-          <ul className='navBar'>
-            <li> <Link to={`/`}>Login</Link> </li>
-            <li> <Link to={`/signup`}>Signup</Link> </li>
-          </ul>
-      }
-
 
       {(state.isLogin) ?
 

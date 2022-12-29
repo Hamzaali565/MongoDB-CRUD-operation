@@ -18,10 +18,10 @@ const mongodbURI = process.env.mongodbURI ||
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use(cors({
-//     origin: ['http://localhost:3000', "*"],
-//     credentials: true
-// }));
+app.use(cors({
+    origin: ['http://localhost:3000', "*"],
+    credentials: true
+}));
 
 
 let productSchema = new mongoose.Schema({
@@ -52,15 +52,7 @@ app.post("/api/v1/signup", (req, res) => {
         || !body.email
         || !body.password
     ) {
-        res.status(400).send(
-            `required fields missing, request example: 
-                {
-                    "firstName": "John",
-                    "lastName": "Doe",
-                    "email": "abc@abc.com",
-                    "password": "12345"
-                }`
-        );
+        res.status(400).send({message:"Required Parameters Are Missing"});
         return;
     }
 
@@ -193,7 +185,7 @@ app.post("/api/v1/login", (req, res) => {
 //     res.send({ message: "Logout successful" });
 // })
 
-app.use("/api/v1",(req, res, next) => {
+app.use("/api/v1", (req, res, next) => {
 
     console.log("req.cookies:", req.cookies);
 
@@ -422,7 +414,7 @@ app.put('/api/v1/product/:id', async (req, res) => {
             data: data
         });
 
-    } 
+    }
     catch (error) {
         console.log("error: ", error)
         res.status(500).send({
