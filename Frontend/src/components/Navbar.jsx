@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { EmojiEmotions, ExpandMore, Group, Home, Image, Share, Mail, Margin, Message, Notifications, PersonAdd, Place, PlayArrow, PlayCircle, Storefront, VideoCameraBack, YouTube, Favorite, MoreVert, Drafts, Send, Inbox, StarBorder, ExpandLess, LiveTv, SportsEsports, CheckBox, FavoriteBorder, ToggleOffOutlined, Mode, ModeNight } from '@mui/icons-material'
+import React, { useContext, useEffect } from 'react'
+import { EmojiEmotions, ExpandMore, Group, Home, Image, Share, Mail, Margin, Message, Notifications, PersonAdd, Place, PlayArrow, PlayCircle, Storefront, VideoCameraBack, YouTube, Favorite, MoreVert, Drafts, Send, Inbox, StarBorder, ExpandLess, LiveTv, SportsEsports, CheckBox, FavoriteBorder, ToggleOffOutlined, Mode, ModeNight, PagesOutlined } from '@mui/icons-material'
 import { Box } from '@mui/system'
 import axios from 'axios';
 import moment from 'moment'
@@ -13,6 +13,7 @@ import SwitchBase from '@mui/material/internal/SwitchBase'
 import { useState } from 'react'
 import { light } from '@mui/material/styles/createPalette';
 import e from 'cors';
+import { GlobalContext } from '../context/Context';
 // import { response } from 'express';
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -61,12 +62,12 @@ const StyledModal = styled(Modal)({
 
 const Navbar = () => {
 
-
+  let { state, dispatch } = useContext(GlobalContext);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [ray1, setRay1] = useState([]);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [del, setDel] = useState("");
   const [isEditing, setIsEditing] = useState("");
   const [chapli, setchapli] = useState(false);
@@ -79,7 +80,7 @@ const Navbar = () => {
   const [opens, setOpens] = useState(false);
   const [mtype, setMtype] = useState("")
   const [messages, setMessages] = useState("")
-   let Objs = {
+  let Objs = {
     name: name,
     price: price,
     description: description,
@@ -96,10 +97,10 @@ const Navbar = () => {
   }
   const deletePost = () => {
     setLoader(true)
-    
-    axios.delete(`${baseUrl}/api/v1/product/${del}`,{withCredentials: true})
+
+    axios.delete(`${baseUrl}/api/v1/product/${del}`, { withCredentials: true })
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         // setLoader(false);
         setPLoad(!pLoad)
         setOpens(true)
@@ -111,14 +112,14 @@ const Navbar = () => {
         setOpens(true)
         setMtype("error")
         setMessages("Product Not Deleted Successfully")
-        console.log("err", err);
+        // console.log("err", err);
       })
   }
   const handlerChange = (e) => {
     e.preventDefault();
-    axios.post(`${baseUrl}/api/v1/product`, Objs, {withCredentials:true})
+    axios.post(`${baseUrl}/api/v1/product`, Objs, { withCredentials: true })
       .then(response => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setPLoad(!pLoad)
         setOpens(true)
         setMtype("success")
@@ -136,9 +137,9 @@ const Navbar = () => {
   const Product = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/product/${byName}`,{withCredentials:true});
+      const response = await axios.get(`${baseUrl}/api/v1/product/${byName}`, { withCredentials: true });
       setRay1(response.data.data)
-      console.log(response.data.data);
+      // console.log(response.data.data);
       // setistrue(!istrue);
     } catch (err) {
       console.log("err", err);
@@ -147,15 +148,15 @@ const Navbar = () => {
 
   const getAllPost = () => {
     setLoader(true);
-    axios.get(`${baseUrl}/api/v1/products`,{withCredentials:true})
+    axios.get(`${baseUrl}/api/v1/products`, { withCredentials: true })
       .then(response => {
         setLoader(false);
-        console.log("allDAta", response.data.data);
+        // console.log("allDAta", response.data.data);
         setRay1(response.data.data.reverse())
-       
+
       })
       .catch(err => {
-        console.log("err", err);
+        // console.log("err", err);
         setLoader(false)
         setOpens(true)
         setMtype("error")
@@ -171,9 +172,9 @@ const Navbar = () => {
     e.preventDefault();
     setLoader(true)
     setchapli(false)
-    axios.put(`${baseUrl}/api/v1/product/${isEditing}`, Objt, {withCredentials : true})
+    axios.put(`${baseUrl}/api/v1/product/${isEditing}`, Objt, { withCredentials: true })
       .then(response => {
-        console.log("allDAta", response.data.data);
+        // console.log("allDAta", response.data.data);
         setPLoad(!pLoad);
         setOpens(true);
         // setLoader(false)
@@ -181,7 +182,7 @@ const Navbar = () => {
         setMessages("Product Updated Successfully")
       })
       .catch(err => {
-        console.log("err", err);
+        // console.log("err", err);
         setOpens(true)
         setLoader(false)
         // setPLoad(!pLoad)
@@ -194,12 +195,6 @@ const Navbar = () => {
   }
 
 
-
-
-  // const handleClick = () => {
-  //   setOpens(true);
-  // };
-
   const handleClose = (event, reason) => {
     // e.preventDefault();
     if (reason === 'clickaway') {
@@ -209,6 +204,21 @@ const Navbar = () => {
     setOpens(false);
   };
 
+  const homeOut = async () => {
+    // try {
+    //   let response = await axios.post(`${baseUrl}/api/v1/logout`,{withCredentials:true})
+    //   // dispatch({
+    //   //   type: 'USER_LOGOUT'
+    //   // })
+
+    // }
+    // catch (e) {
+    //   console.log("e: ", e);
+    //   setOpens(true);
+    //   setMtype("error")
+    //   setMessages(e.response.data.message)
+    // }
+  }
   return (
     <div>
       <AppBar position="sticky" color='error'>
@@ -254,11 +264,19 @@ const Navbar = () => {
               <Notifications />
             </Badge>
             <Avatar sx={{ width: 30, height: 30 }}
-              src="https://scontent.fkhi22-1.fna.fbcdn.net/v/t1.6435-9/188384323_1447601038927019_7887706600818859341_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeGCL_hYTwG3k08kQD1LvB8Nsc5T_WLrH_GxzlP9Yusf8UL9sMeXCGVl0UPyrwu9aI_Jxl1QzZohUXqIXpF8s3en&_nc_ohc=7FRlBip4joUAX-tigpc&_nc_ht=scontent.fkhi22-1.fna&oh=00_AfAwof37GJPcifAUMMjWyR4bvCvOynHtJ3UWO1Z1k0j0Pw&oe=63B01325" />
+
+              src="https://scontent.fkhi22-1.fna.fbcdn.net/v/t1.6435-9/188384323_1447601038927019_7887706600818859341_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeGCL_hYTwG3k08kQD1LvB8Nsc5T_WLrH_GxzlP9Yusf8UL9sMeXCGVl0UPyrwu9aI_Jxl1QzZohUXqIXpF8s3en&_nc_ohc=7FRlBip4joUAX-tigpc&_nc_ht=scontent.fkhi22-1.fna&oh=00_AfAwof37GJPcifAUMMjWyR4bvCvOynHtJ3UWO1Z1k0j0Pw&oe=63B01325"
+              onClick={(e) => {
+                setOpen(true)
+              }}
+            />
           </Iconi>
 
           <UserBox>
             <Avatar sx={{ width: 30, height: 30 }}
+              onClick={(e) => {
+                setOpen(true)
+              }}
               src="https://scontent.fkhi22-1.fna.fbcdn.net/v/t1.6435-9/188384323_1447601038927019_7887706600818859341_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeGCL_hYTwG3k08kQD1LvB8Nsc5T_WLrH_GxzlP9Yusf8UL9sMeXCGVl0UPyrwu9aI_Jxl1QzZohUXqIXpF8s3en&_nc_ohc=7FRlBip4joUAX-tigpc&_nc_ht=scontent.fkhi22-1.fna&oh=00_AfAwof37GJPcifAUMMjWyR4bvCvOynHtJ3UWO1Z1k0j0Pw&oe=63B01325" />
             <Typography variant='span'>Muhammad</Typography>
           </UserBox>
@@ -715,7 +733,27 @@ const Navbar = () => {
         {/* <Alert severity="success">This is a success message!</Alert> */}
       </Stack>
 
-
+      <Menu
+        id="demo-positioned-menu"
+        aria-labelledby="demo-positioned-button"
+        open={open}
+        onClose={(e) => { setOpen(false) }}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={(e) => setOpen(false)}>Profile</MenuItem>
+        <MenuItem onClick={(e) => setOpen(false)}>My account</MenuItem>
+        <MenuItem onClick={(e) => {
+          setOpen(false)
+          homeOut();
+        }}>Logout</MenuItem>
+      </Menu>
     </div >
   )
 }

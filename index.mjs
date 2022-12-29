@@ -106,11 +106,9 @@ app.post("/api/v1/login", (req, res) => {
 
     if (!body.email || !body.password) { // null check - undefined, "", 0 , false, null , NaN
         res.status(400).send(
-            `required fields missing, request example: 
-                {
-                    "email": "abc@abc.com",
-                    "password": "12345"
-                }`
+            {
+                message:"Reqiured Parameters are Missing"
+            }
         );
         return;
     }
@@ -175,15 +173,15 @@ app.post("/api/v1/login", (req, res) => {
         })
 })
 
-// app.post("/api/v1/logout", (req, res) => {
+app.post("/api/v1/logout", (req, res) => {
 
-//     res.cookie('Token', '', {
-//         maxAge: 1,
-//         httpOnly: true
-//     });
+    res.cookie('Token', '', {
+        maxAge: 1,
+        httpOnly: true
+    });
 
-//     res.send({ message: "Logout successful" });
-// })
+    res.send({ message: "Logout successful" });
+})
 
 app.use("/api/v1", (req, res, next) => {
 
