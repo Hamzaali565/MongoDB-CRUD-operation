@@ -205,19 +205,16 @@ const Navbar = () => {
   };
 
   const homeOut = async () => {
-    // try {
-    //   let response = await axios.post(`${baseUrl}/api/v1/logout`,{withCredentials:true})
-    //   // dispatch({
-    //   //   type: 'USER_LOGOUT'
-    //   // })
-
-    // }
-    // catch (e) {
-    //   console.log("e: ", e);
-    //   setOpens(true);
-    //   setMtype("error")
-    //   setMessages(e.response.data.message)
-    // }
+    try {
+      let response = await axios.post(`${baseUrl}/api/v1/logout`, { withCredentials: true })
+      console.log("res", response);
+      dispatch({
+        type: 'USER_LOGOUT'
+      })
+    }
+    catch (e) {
+      console.log("e: ", e);
+    }
   }
   return (
     <div>
