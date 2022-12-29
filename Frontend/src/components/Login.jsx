@@ -56,7 +56,7 @@ function Login() {
             setResult("login successful")
 
         } catch (e) {
-            // console.log("e: ", e.response.data.message);
+            console.log("e: ", e.response.data.message);
             setOpens(true);
             setMtype("error")
             setMessages(e.response.data.message)

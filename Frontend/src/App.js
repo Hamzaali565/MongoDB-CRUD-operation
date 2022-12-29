@@ -10,6 +10,7 @@ import { Box, createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import axios from 'axios';
 import { Routes, Route, Link, Navigate } from "react-router-dom";
+import Splash from './components/Splash';
 let baseUrl = ""
 if (window.location.href.split(":")[0] === "http") {
   baseUrl = "http://localhost:5001"
@@ -43,24 +44,29 @@ function App() {
 
     <Stack>
 
-      {(state.isLogin) ?
+      {(state.isLogin === true) ?
 
         <Routes>
           <Route path="/" element={<Navbar />} />
           <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Routes>
         :
+        null
+      }
+      {(state.isLogin === false) ?
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Routes>
+        :
+        null
       }
 
       {
         (state.isLogin === null) ?
-          <div>Splash</div> :
-          null
+          <Splash />
+          : null
       }
     </Stack>
 
