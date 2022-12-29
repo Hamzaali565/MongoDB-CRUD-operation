@@ -41,7 +41,7 @@ function Signup() {
         if (confirmPassword !== password){
             setOpens(true);
             setMtype("error")
-            setMessages("Password is does not meet Match")
+            setMessages("Password is does not match")
             return;
         }
             try {
