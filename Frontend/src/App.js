@@ -11,19 +11,13 @@ import { ThemeProvider } from '@emotion/react';
 import axios from 'axios';
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Splash from './components/Splash';
-let baseUrl = ""
-if (window.location.href.split(":")[0] === "http") {
-  baseUrl = "http://localhost:5001"
-}
+
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
-
-  const [fullName, setFullName] = useState("");
-
   useEffect(() => {
     const getProduct = async () => {
       try {
-        let response = await axios.get(`${baseUrl}/api/v1/products`, {
+        let response = await axios.get(`${state.baseUrl}/api/v1/products`, {
           withCredentials: true
         })
         dispatch({

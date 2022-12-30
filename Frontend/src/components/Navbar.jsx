@@ -11,10 +11,7 @@ import {
 import { red } from '@mui/material/colors'
 import SwitchBase from '@mui/material/internal/SwitchBase'
 import { useState } from 'react'
-import { light } from '@mui/material/styles/createPalette';
-import e from 'cors';
 import { GlobalContext } from '../context/Context';
-// import { response } from 'express';
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between"
@@ -91,14 +88,11 @@ const Navbar = () => {
     description: isEditingDescription,
   }
 
-  let baseUrl = "";
-  if (window.location.href.split(":")[0] === "http") {
-    baseUrl = "http://localhost:5001"
-  }
+  
   const deletePost = () => {
     setLoader(true)
 
-    axios.delete(`${baseUrl}/api/v1/product/${del}`, { withCredentials: true })
+    axios.delete(`${state.baseUrl}/api/v1/product/${del}`, { withCredentials: true })
       .then(response => {
         // console.log(response.data);
         // setLoader(false);
@@ -117,7 +111,7 @@ const Navbar = () => {
   }
   const handlerChange = (e) => {
     e.preventDefault();
-    axios.post(`${baseUrl}/api/v1/product`, Objs, { withCredentials: true })
+    axios.post(`${state.baseUrl}/api/v1/product`, Objs, { withCredentials: true })
       .then(response => {
         // console.log(response.data.data);
         setPLoad(!pLoad)
@@ -137,7 +131,7 @@ const Navbar = () => {
   const Product = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${baseUrl}/api/v1/product/${byName}`, { withCredentials: true });
+      const response = await axios.get(`${state.baseUrl}/api/v1/product/${byName}`, { withCredentials: true });
       setRay1(response.data.data)
       // console.log(response.data.data);
       // setistrue(!istrue);
@@ -148,7 +142,7 @@ const Navbar = () => {
 
   const getAllPost = () => {
     setLoader(true);
-    axios.get(`${baseUrl}/api/v1/products`, { withCredentials: true })
+    axios.get(`${state.baseUrl}/api/v1/products`, { withCredentials: true })
       .then(response => {
         setLoader(false);
         // console.log("allDAta", response.data.data);
@@ -172,7 +166,7 @@ const Navbar = () => {
     e.preventDefault();
     setLoader(true)
     setchapli(false)
-    axios.put(`${baseUrl}/api/v1/product/${isEditing}`, Objt, { withCredentials: true })
+    axios.put(`${state.baseUrl}/api/v1/product/${isEditing}`, Objt, { withCredentials: true })
       .then(response => {
         // console.log("allDAta", response.data.data);
         setPLoad(!pLoad);
@@ -206,7 +200,7 @@ const Navbar = () => {
 
   const homeOut = async () => {
     try {
-      let response = await axios.post(`${baseUrl}/api/v1/logout`, { withCredentials: true })
+      let response = await axios.post(`${state.baseUrl}/api/v1/logout`, { withCredentials: true })
       console.log("res", response);
       dispatch({
         type: 'USER_LOGOUT'

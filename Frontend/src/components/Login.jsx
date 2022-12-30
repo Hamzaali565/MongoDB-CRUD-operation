@@ -6,11 +6,6 @@ import { Box, height, padding } from "@mui/system";
 import { Link } from "react-router-dom";
 
 
-let baseUrl = "";
-if (window.location.href.split(":")[0] === "http") {
-    baseUrl = "http://localhost:5001"
-}
-
 const Cont = styled(Box)({
     display: "flex",
     justifyContent: "center",
@@ -41,7 +36,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            let response = await axios.post(`${baseUrl}/api/v1/login`, {
+            let response = await axios.post(`${state.baseUrl}/api/v1/login`, {
                 email: email,
                 password: password
             }, {

@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from 'axios';
 import { Alert, Button, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../context/Context";
 
-let baseUrl = "";
-if (window.location.href.split(":")[0] === "http") {
-    baseUrl = "http://localhost:5001"
-}
 const Cont = styled(Box)({
     display: "flex",
     justifyContent: "center",
@@ -25,9 +22,8 @@ const FieldCont = styled(Box)({
 
 })
 function Signup() {
-
+    let { state, dispatch } = useContext(GlobalContext);
     const [result, setResult] = useState("");
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -38,33 +34,33 @@ function Signup() {
 
     const signupHandler = async (e) => {
         e.preventDefault();
-        if (confirmPassword !== password){
+        if (confirmPassword !== password) {
             setOpens(true);
             setMtype("error")
             setMessages("Password is does not match")
             return;
         }
-            try {
-                let response = await axios.post(`${baseUrl}/api/v1/signup`, {
-                    firstName: name,
-                    lastName: name,
-                    email: email,
-                    password: password
-                }, {
-                    withCredentials: true
-                })
+        try {
+            let response = await axios.post(`${state.baseUrl}/api/v1/signup`, {
+                firstName: name,
+                lastName: name,
+                email: email,
+                password: password
+            }, {
+                withCredentials: true
+            })
 
 
-                console.log("signup successful");
-                setResult("signup successful")
+            console.log("signup successful");
+            setResult("signup successful")
 
-            }
-            catch (e) {
-                console.log("e: ", e);
-                setOpens(true);
-                setMtype("error")
-                setMessages(e.response.data.message)
-            }
+        }
+        catch (e) {
+            console.log("e: ", e);
+            setOpens(true);
+            setMtype("error")
+            setMessages(e.response.data.message)
+        }
     }
     const handleClose = (event, reason) => {
         // e.preventDefault();
