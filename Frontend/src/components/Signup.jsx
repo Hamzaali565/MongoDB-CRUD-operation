@@ -4,6 +4,8 @@ import { Alert, Button, Snackbar, Stack, TextField, Typography } from "@mui/mate
 import { Box, styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../context/Context";
+import { Login } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Cont = styled(Box)({
     display: "flex",
@@ -21,6 +23,7 @@ const FieldCont = styled(Box)({
 
 
 })
+
 function Signup() {
     let { state, dispatch } = useContext(GlobalContext);
     const [result, setResult] = useState("");
@@ -32,13 +35,15 @@ function Signup() {
     const [opens, setOpens] = useState(false);
     const [mtype, setMtype] = useState("")
     const [messages, setMessages] = useState("")
+   
+    let navigate = useNavigate();
 
-    const signupHandler = async (e) => {
+    const SignupHandler = async (e) => {
         e.preventDefault();
         if (confirmPassword !== password) {
             setOpens(true);
             setMtype("error")
-            setMessages("Password is does not match")
+            setMessages("Password does not match")
             return;
         }
         try {
@@ -51,13 +56,8 @@ function Signup() {
                 withCredentials: true
             })
 
-            dispatch({
-                type: 'USER_LOGIN',
-                payload: response.data.profile
-            })
-
-            console.log("signup successful");
-            setResult("signup successful")
+            let path = `/login`;
+            navigate(path);
 
         }
         catch (e) {
@@ -89,31 +89,29 @@ function Signup() {
                         }}
                     >Sign-up</Typography>
 
-                    <form onSubmit={signupHandler}>
+                    <form onSubmit={SignupHandler}>
 
                         <TextField
                             sx={{ mt: "10px" }}
                             className="TextField"
                             id="name"
-                            label="name"
+                            label="First Name"
                             variant="outlined"
                             type="name"
                             name="username"
-                            placeholder="First Name"
-                            autoComplete="name"
+                            autoComplete="First Name"
                             onChange={(e) => { setName(e.target.value) }}
                         />
                         <br />
                         <TextField
                             sx={{ mt: "10px" }}
                             className="TextField"
-                            id="name"
-                            label="name"
+                            id="name1"
+                            label="Last Name"
                             variant="outlined"
                             type="name"
                             name="username"
-                            placeholder="Last Name"
-                            autoComplete="name"
+                            autoComplete="Last name"
                             onChange={(e) => { setLastName(e.target.value) }}
                         />
                         <br />
@@ -126,7 +124,7 @@ function Signup() {
                             type="email"
                             name="username"
                             placeholder="email"
-                            autoComplete="username"
+                            autoComplete="email"
                             onChange={(e) => { setEmail(e.target.value) }}
                         />
 
@@ -139,7 +137,7 @@ function Signup() {
                             variant="outlined"
                             type="password"
                             name="current-password"
-                            // autoComplete="new-password"
+                            autoComplete="new-password"
                             placeholder="password"
                             onChange={(e) => { setPassword(e.target.value) }}
                         />
@@ -147,12 +145,12 @@ function Signup() {
                         <TextField
                             sx={{ mt: "10px" }}
                             className="TextField"
-                            id="password"
+                            id="password1"
                             label="Password"
                             variant="outlined"
                             type="password"
                             name="current-password"
-                            // autoComplete="new-password"
+                            autoComplete="new-password"
                             placeholder="password"
                             onChange={(e) => { setConfimPassword(e.target.value) }}
                         />
@@ -167,7 +165,6 @@ function Signup() {
                         </Box>
 
                     </form>
-                    <p>{result}</p>
                 </FieldCont>
             </Cont>
             <Stack spacing={2} sx={{ width: '100%' }}>

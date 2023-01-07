@@ -66,6 +66,7 @@ const Splash = () => {
                             id="free-solo-demo"
                             freeSolo
                             renderInput={(params) => <TextField {...params} />}
+                            // options={"hazma"}
                         />
                     </form>
                 </Search>
