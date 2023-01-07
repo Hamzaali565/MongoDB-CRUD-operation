@@ -66,7 +66,7 @@ router.post('/signup', (req, res) => {
     })
 });
 
-router.post("/login", (req, res) => {
+router.post('/login', (req, res) => {
 
     let body = req.body;
     body.email = body.email.toLowerCase();
@@ -142,7 +142,7 @@ router.post("/login", (req, res) => {
         })
 })
 
-router.post("/logout", (req, res) => {
+router.post('/logout', (req, res) => {
 
     res.cookie('Token', '', {
         maxAge: 1,

@@ -44,7 +44,7 @@ function Login() {
             })
             dispatch({
                 type: 'USER_LOGIN',
-                payload: null
+                payload: response.data.profile
             })
 
             console.log("login successful");

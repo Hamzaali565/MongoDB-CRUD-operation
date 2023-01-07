@@ -25,6 +25,7 @@ function Signup() {
     let { state, dispatch } = useContext(GlobalContext);
     const [result, setResult] = useState("");
     const [name, setName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfimPassword] = useState("");
@@ -43,13 +44,17 @@ function Signup() {
         try {
             let response = await axios.post(`${state.baseUrl}/api/v1/signup`, {
                 firstName: name,
-                lastName: name,
+                lastName: lastName,
                 email: email,
                 password: password
             }, {
                 withCredentials: true
             })
 
+            dispatch({
+                type: 'USER_LOGIN',
+                payload: response.data.profile
+            })
 
             console.log("signup successful");
             setResult("signup successful")
@@ -94,9 +99,22 @@ function Signup() {
                             variant="outlined"
                             type="name"
                             name="username"
-                            placeholder="Name"
+                            placeholder="First Name"
                             autoComplete="name"
                             onChange={(e) => { setName(e.target.value) }}
+                        />
+                        <br />
+                        <TextField
+                            sx={{ mt: "10px" }}
+                            className="TextField"
+                            id="name"
+                            label="name"
+                            variant="outlined"
+                            type="name"
+                            name="username"
+                            placeholder="Last Name"
+                            autoComplete="name"
+                            onChange={(e) => { setLastName(e.target.value) }}
                         />
                         <br />
                         <TextField

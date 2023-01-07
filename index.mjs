@@ -3,10 +3,10 @@ import path from 'path';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';   
+import cookieParser from 'cookie-parser';
 import authApis from './apis/auth.mjs'
 import productApis from './apis/product.mjs'
-
+import { userModel } from './dbRepo/Models.mjs';
 const SECRET = process.env.SECRET || "topsecret";
 
 const app = express()
@@ -16,14 +16,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: ['http://localhost:3000','https://localhost:3000' ,"*"],
-    credentials: true
+    origin: ['http://localhost:3000', "*"],
+    credentials: true,
 }));
+// app.use(cors())
 
 app.use('/api/v1', authApis);
 
-app.use("/api/v1", (req, res, next) => {
-    
+app.use('/api/v1', (req, res, next) => {
+
     console.log("req.cookies:", req.cookies);
 
     if (!req?.cookies?.Token) {
@@ -47,7 +48,7 @@ app.use("/api/v1", (req, res, next) => {
                     maxAge: 1,
                     httpOnly: true,
                     sameSite: 'none',
-                    secure:true
+                    secure: true
                 });
                 res.send({ message: "token expired" })
 
@@ -65,6 +66,62 @@ app.use("/api/v1", (req, res, next) => {
 });
 
 app.use('/api/v1', productApis);
+
+// const getUser = async (req, res) => {
+//     let _id = ""
+//     if (req.params.id) {
+//         _id = req.params.id
+//     } else {
+//         id = req.body.token._id
+//     }
+//     try {
+//         const user = await userModel.findOne({ _id: _id },
+//             "email firstName lastName -_id"
+//         ).exec()
+//         if (!user) {
+//             res.status(404).send({ message: "user Not Found" })
+//             return;
+//         } else {
+//             res.status(200).send(user)
+//         }
+//     } catch (error) {
+//         console.log("err", error);
+//         res.status(500).send({ message: "something went wrong" })
+//     }
+// }
+
+const getUser = async (req, res) => {
+
+    let _id = "";
+    if(req.params._id){
+        _id = req.params._id
+    }else{
+        _id = req.body.token._id
+    }
+
+    try {
+        const user = await userModel.findOne({ _id: _id },"email firstName lastName -_id").exec()
+
+        if (!user) {
+            res.status(404).send({
+                message: "unsuccessfull response"
+            })
+            return;
+        } else {
+            res.status(200).send(user)
+        }
+
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).send({
+            message: "server error"
+        })
+    }
+
+}
+
+app.get('/api/v1/profile', getUser)
+app.get('/api/v1/profile/:id', getUser)
 
 const __dirname = path.resolve();
 app.use('/', express.static(path.join(__dirname, './Frontend/build')))

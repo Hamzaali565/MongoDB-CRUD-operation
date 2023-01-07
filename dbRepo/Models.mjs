@@ -5,6 +5,8 @@ mongoose.set('strictQuery', true);
 let productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     price: Number,
+    owner: {type: mongoose.ObjectId, required: true},
+    isDeleted: {type: Boolean, default: false},
     description: String,
     createdOn: { type: Date, default: Date.now }
 });

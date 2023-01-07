@@ -146,7 +146,8 @@ const Navbar = () => {
       .then(response => {
         setLoader(false);
         // console.log("allDAta", response.data.data);
-        setRay1(response.data.data.reverse())
+        setRay1(response.data.data)
+        // console.log("setRay1 :", ray1);
 
       })
       .catch(err => {
@@ -160,6 +161,26 @@ const Navbar = () => {
 
   useEffect(() => {
     getAllPost();
+    // const getProfile = async () => {
+    //   try {
+    //     let response = await 
+    //     axios.get(`${state.baseUrl}/api/v1/profile`, {
+    //       withCredentials: true
+    //     })
+    //     dispatch({
+    //       type: 'USER_LOGIN',
+    //       payload: response.data
+
+    //     })
+    //   }
+    //   catch {
+    //     dispatch({
+    //       type: 'USER_LOGOUT'
+    //     })
+
+    //   }
+    // }
+    // getProfile();
   }, [pLoad])
 
   const updation = (e) => {
@@ -200,7 +221,7 @@ const Navbar = () => {
 
   const homeOut = async () => {
     try {
-      let response = await axios.post(`${state.baseUrl}/api/v1/logout`, { withCredentials: true })
+      let response = await axios.post(`${state.baseUrl}/api/v1/logout`, {},{ withCredentials: true })
       console.log("res", response);
       dispatch({
         type: 'USER_LOGOUT'
@@ -230,8 +251,8 @@ const Navbar = () => {
                 }}
                 id="free-solo-demo"
                 freeSolo
-                options=
-                {ray1?.map((option) => option.name)}
+                options= 
+                {ray1?.map((option) => option.name)} 
                 // onChange={(e) => {
                 //   setByName(e.target.value)
                 // }}
@@ -241,7 +262,7 @@ const Navbar = () => {
 
                 }}
                 placeholder="Search With UserName"
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params}  label = "Search By Name"/>}
               />
             </form>
           </Search>
@@ -369,7 +390,7 @@ const Navbar = () => {
                 <UserBox1>
                   <Avatar sx={{ width: 40, height: 40 }}
                     src="https://scontent.fkhi22-1.fna.fbcdn.net/v/t1.6435-9/188384323_1447601038927019_7887706600818859341_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeGCL_hYTwG3k08kQD1LvB8Nsc5T_WLrH_GxzlP9Yusf8UL9sMeXCGVl0UPyrwu9aI_Jxl1QzZohUXqIXpF8s3en&_nc_ohc=7FRlBip4joUAX-tigpc&_nc_ht=scontent.fkhi22-1.fna&oh=00_AfAwof37GJPcifAUMMjWyR4bvCvOynHtJ3UWO1Z1k0j0Pw&oe=63B01325" />
-                  <Typography fontWeight={500} variant="span">Muhammad Hamza Ali</Typography>
+                  <Typography fontWeight={500} variant="span">{state?.user?.firstName} {state?.user?.lastName}</Typography>
                 </UserBox1>
                 <form onSubmit={handlerChange} sx={{ width: "100%" }}>
                   <TextField
